@@ -40,7 +40,7 @@ export const loginController = async (req, res) => {
      if(!isMatch) {
       return res.status(401).json({errors:"Invalid credentials"});
      }
-     
+    req.session.user = user;
      const token = user.generateJWT();
      delete user._doc.password;
      return res.status(200).json({user, token});
@@ -52,10 +52,8 @@ export const loginController = async (req, res) => {
 };
 
 export const profileController = async (req, res) => {
-  console.log(req.user);
-  return res.status(200).json({
-    user:req.user
-  })
+  if (!req.session.user) return res.status(401).json({ message: "Not logged in" });
+  res.json({ user: req.session.user });
 };
 
 export const logout = async (req,res) =>{
@@ -63,6 +61,10 @@ export const logout = async (req,res) =>{
     const token = req.cookies.token || req.headers.authorization.split(' ')[1];
 
     redisClient.set(token, 'logout', 'EX', 60 * 60 * 24);
+
+    req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+  });
 
     res.status(200).json({message: "Logout successful"});
   } catch (err) {

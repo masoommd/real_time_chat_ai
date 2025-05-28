@@ -222,10 +222,12 @@ const Project = () => {
   return (
     <main className="h-screen w-screen flex">
       <section className="left relative flex flex-col h-screen min-w-80 bg-slate-300 ">
-        <header className="flex justify-between items-center p-2 px-4 w-full bg-slate-100 absolute top-0">
+        <header className="flex justify-between items-center p-2 px-4 w-full bg-slate-100 absolute z-10 top-0">
           <button
             className="flex gap-2 cursor-pointer"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              console.log("click")
+              setIsModalOpen(true)}}
           >
             <i className="ri-add-fill mr-1"></i>
             <p className="font-semibold">Add Collaborator</p>
