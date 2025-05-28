@@ -1,0 +1,2 @@
+user_service is responsible for all the operation related to database like createuser. By the use of userService we only create controller and import function from the userService file as needed.
+userService file is created because it make easy to change services like database from MongoDB to MySQL 
