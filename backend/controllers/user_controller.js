@@ -12,7 +12,9 @@ export const createUserController = async (req, res) => {
 
   try {
     const user = await userService.createUser(req.body);
-    const token = user.generateJWT();
+
+    const token = await user.generateJWT();
+
     delete user._doc.password;
     return res.status(201).json({ user, token });
   } catch (error) {
@@ -30,6 +32,7 @@ export const loginController = async (req, res) => {
 
   try {
     const {email, password} = req.body;
+
     const user = await User.findOne({email}).select("+password");
 
     if(!user) {
@@ -37,12 +40,15 @@ export const loginController = async (req, res) => {
     }
 
     const isMatch = await user.isValidPassword(password);
+
      if(!isMatch) {
       return res.status(401).json({errors:"Invalid credentials"});
      }
-    req.session.user = user;
-     const token = user.generateJWT();
+     
+     const token = await user.generateJWT();
+
      delete user._doc.password;
+
      return res.status(200).json({user, token});
 
   } catch (err) {
@@ -52,8 +58,10 @@ export const loginController = async (req, res) => {
 };
 
 export const profileController = async (req, res) => {
-  if (!req.session.user) return res.status(401).json({ message: "Not logged in" });
-  res.json({ user: req.session.user });
+  
+  res.status(200).json({
+    user:req.user
+  })
 };
 
 export const logout = async (req,res) =>{

@@ -6,31 +6,32 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Project from "./models/project_models.js";
 import { generateResult } from "./services/ai_service.js";
-import { sessionMiddleware } from "./middleware/session.js";
+
 
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    credentials: true,
+    // origin: "http://localhost:5173",
+    origin:"*",
+    // credentials: true,
   },
 });
 
-io.engine.use((req, res, next) => {
-  sessionMiddleware(req, {}, next);
-});
+// io.engine.use((req, res, next) => {
+//   sessionMiddleware(req, {}, next);
+// });
 
 io.use(async (socket, next) => {
   try {
 
-    const { session } = socket.request;
+    // const { session } = socket.request;
 
-    if (!session?.user) {
-      return next(new Error("Unauthenticated"));  // no login → no WS
-    }
-    socket.user = session.user;   
+    // if (!session?.user) {
+    //   return next(new Error("Unauthenticated"));  // no login → no WS
+    // }
+    // socket.user = session.user;   
 
     const token =
       socket.handshake.auth?.token ||
@@ -52,7 +53,7 @@ io.use(async (socket, next) => {
     if (!decoded) {
       return next(new Error("Authentication error"));
     }
-    // socket.user = decoded;
+    socket.user = decoded;
 
     next();
   } catch (err) {
