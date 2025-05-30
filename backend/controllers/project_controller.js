@@ -104,4 +104,35 @@ export const updateFileTree = async (req,res) => {
     console.log(err);
     res.status(400).json({error:err.message})
   }
+};
+
+export const addMessageToProject = async (req,res) => {
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors:errors.array()})
+  }
+
+  try {
+    const {projectId, message} = req.body;
+    const loggedInUser = await User.findOne({
+      email:req.user.email
+    });
+
+    console.log(projectId,message);
+
+    const project = await projectService.addMessageToProject({
+      projectId,
+      message,
+      sender:loggedInUser._id,
+    })
+
+    return res.status(200).json({
+      project
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({error:err.message})
+  }
 }
+

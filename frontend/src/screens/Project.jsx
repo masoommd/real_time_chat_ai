@@ -86,12 +86,12 @@ const Project = () => {
   }
 
   const send = () => {
-    console.log(user);
     sendMessage("project-message", {
       message,
       sender: user,
     });
     appendOutgoingMessage(message);
+    saveMessages(message);
     setMessage("");
   };
 
@@ -121,7 +121,6 @@ const Project = () => {
           message = data.message;
         }
       }
-      console.log("message", message); //remove later
 
       if (message.fileTree) {
         setFileTree(message.fileTree);
@@ -138,6 +137,7 @@ const Project = () => {
       .then((res) => {
         setProject(res.data.project);
         setFileTree(res.data.project.fileTree);
+        setMessages(res.data.project.messages);
       })
       .catch((err) => {
         console.log(err);
@@ -154,13 +154,13 @@ const Project = () => {
   }, []);
 
   const appendIncomingMessage = (messageObject) => {
-    setMessages((prev) => [...prev, { ...messageObject, incoming: true }]);
+    setMessages((prev) => [...prev, { ...messageObject }]);
   };
 
   const appendOutgoingMessage = (message) => {
     setMessages((prev) => [
       ...prev,
-      { message, sender: user, incoming: false },
+      { message, sender: user },
     ]);
   };
 
@@ -214,6 +214,21 @@ const Project = () => {
       });
   }
 
+  function saveMessages(msg) {
+    console.log("save messages")
+    console.log(project._id,msg)
+    axios.put("/projects/add-messages", {
+        projectId: project._id,
+        message:msg
+      })
+      .then((res) => {
+        console.log("success",res.data);
+      })
+      .catch((err) => {
+        console.log("failure",err);
+      });
+  }
+
   function scrollToBottom() {
     messageBox.current.scrollTop = messageBox.current.scrollHeight;
   }
@@ -250,7 +265,7 @@ const Project = () => {
               <div
                 key={idx}
                 className={`message flex flex-col p-2 ${
-                  msg.incoming ? "mr-auto bg-slate-200" : "ml-auto bg-slate-200"
+                  msg.sender._id == user._id ? "ml-auto bg-slate-200" : "mr-auto bg-slate-200"
                 } ${msg.sender._id === "ai" ? "max-w-72" : "max-w-56"}`}
               >
                 <small className="opacity-65 text-xs">

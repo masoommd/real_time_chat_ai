@@ -7,7 +7,7 @@ import {UserContext} from '../context/user_context'
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {setUser} = useContext(UserContext);
+  const {setUser,setLoggedInUser} = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ const Login = () => {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', res.data.user);
         setUser(res.data.user)
+        setLoggedInUser(res.data.user)
         navigate('/');
       }
     } catch (err) {

@@ -58,9 +58,9 @@ export const loginController = async (req, res) => {
 };
 
 export const profileController = async (req, res) => {
-  
+  const user = await User.findOne({email:req.user.email}).select("+password"); //password remove krna hai
   res.status(200).json({
-    user:req.user
+    user
   })
 };
 

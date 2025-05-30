@@ -98,9 +98,13 @@ export const getProjectById = async ({ projectId }) => {
     throw new Error("Invalid projectId");
   }
 
-  const project = await Project.findById({
-    _id:projectId
-  }).populate('users');
+  const project = await Project.findById(projectId)
+    .populate('users') // populates user info in `users` array
+    .populate({
+      path: 'messages.sender', // this is the key point
+      model: 'User',
+      select: '_id email', // optional: only return _id and email
+    })
 
   if (!project) {
     throw new Error("Project not found");
@@ -133,4 +137,33 @@ export const updateFileTree = async ({projectId, fileTree}) => {
 return project;
 }
 
+export const addMessageToProject = async ({ projectId, message, sender }) => {
+  if (!projectId) {
+    throw new Error("Project Id is required");
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(projectId)) {
+    throw new Error("Invalid projectId");
+  }
+
+  if (!message || !sender) {
+    throw new Error("Message and sender are required");
+  }
+
+  const updatedProject = await Project.findOneAndUpdate(
+    { _id: projectId },
+    {
+      $push: {
+        messages: {
+          message,
+          sender,
+          timestamp: new Date(), // Optional, if not automatically set in schema
+        },
+      },
+    },
+    { new: true }
+  );
+
+  return updatedProject;
+};
 

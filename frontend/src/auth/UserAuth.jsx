@@ -35,6 +35,7 @@ const UserAuth = ({children}) => {
         const res = await axios.get("/users/profile");
         if (res.data) {
             setUser(res.data.user); 
+            console.log("user auth 38",res.data.user);
         };
 
         
