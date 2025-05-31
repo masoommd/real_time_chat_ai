@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../config/axios'
 import {UserContext} from '../context/user_context'
+import Navbar from '../components/Navbar';
 
 
 const Login = () => {
@@ -25,12 +26,15 @@ const Login = () => {
         navigate('/');
       }
     } catch (err) {
+      alert("Failed");``
       console.log(err);
     }
 
   }
 
   return (
+    <>
+    <Navbar/>
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center">Login</h2>
@@ -65,7 +69,7 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 cursor-pointer rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Login
           </button>
@@ -78,6 +82,7 @@ const Login = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

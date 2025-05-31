@@ -2,6 +2,8 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/user_context";
 import axios from "../config/axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const { user } = useContext(UserContext);
@@ -38,6 +40,8 @@ const Home = () => {
       });
   }, []);
   return (
+    <>
+    <Navbar/>
     <main className="p-4">
       <div className="projects flex flex-wrap gap-3">
         <button
@@ -107,6 +111,8 @@ const Home = () => {
         </div>
       )}
     </main>
+     <Footer/>
+    </>
   );
 };
 
