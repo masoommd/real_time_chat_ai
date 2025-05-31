@@ -99,11 +99,11 @@ export const getProjectById = async ({ projectId }) => {
   }
 
   const project = await Project.findById(projectId)
-    .populate('users') // populates user info in `users` array
+    .populate('users') 
     .populate({
-      path: 'messages.sender', // this is the key point
+      path: 'messages.sender', 
       model: 'User',
-      select: '_id email', // optional: only return _id and email
+      select: '_id email', 
     })
 
   if (!project) {
@@ -157,7 +157,7 @@ export const addMessageToProject = async ({ projectId, message, sender }) => {
         messages: {
           message,
           sender,
-          timestamp: new Date(), // Optional, if not automatically set in schema
+          timestamp: new Date(), 
         },
       },
     },

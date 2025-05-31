@@ -294,12 +294,15 @@ const Project = () => {
                 placeholder="Enter message"
                 rows="1"
                 style={{
-                  minHeight: "44px", // or whatever height matches your design
-                  maxHeight: "120px", // maximum height before scrolling
+                  minHeight: "44px",
+                  maxHeight: "120px",
                   overflowY: "auto",
                 }}
               />
-              <button onClick={send} className="px-5 bg-slate-950 text-white hover:bg-slate-900">
+              <button
+                onClick={send}
+                className="px-5 bg-slate-950 text-white hover:bg-slate-900"
+              >
                 <i className="ri-send-plane-fill"></i>
               </button>
             </div>
@@ -343,18 +346,19 @@ const Project = () => {
         <section className="right bg-red-50 flex-grow h-full flex">
           <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
             <div className="file-tree w-full">
-              {fileTree && Object?.keys(fileTree).map((file, index) => (
-                <button
-                  key={index}
-                  className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
-                  onClick={() => {
-                    setCurrentFile(file);
-                    setOpenFiles([...new Set([...openFiles, file])]);
-                  }}
-                >
-                  <p className="font-semibold text-lg">{file}</p>
-                </button>
-              ))}
+              {fileTree &&
+                Object?.keys(fileTree).map((file, index) => (
+                  <button
+                    key={index}
+                    className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
+                    onClick={() => {
+                      setCurrentFile(file);
+                      setOpenFiles([...new Set([...openFiles, file])]);
+                    }}
+                  >
+                    <p className="font-semibold text-lg">{file}</p>
+                  </button>
+                ))}
             </div>
           </div>
 

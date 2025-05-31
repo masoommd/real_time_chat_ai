@@ -13,25 +13,15 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    // origin:"*",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   },
 });
 
-// io.engine.use((req, res, next) => {
-//   sessionMiddleware(req, {}, next);
-// });
+
 
 io.use(async (socket, next) => {
-  try {
-
-    // const { session } = socket.request;
-
-    // if (!session?.user) {
-    //   return next(new Error("Unauthenticated"));  // no login → no WS
-    // }
-    // socket.user = session.user;   
+  try {  
 
     const token =
       socket.handshake.auth?.token ||

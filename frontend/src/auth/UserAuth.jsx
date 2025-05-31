@@ -15,23 +15,23 @@ const UserAuth = ({children}) => {
    
 
     useEffect(() => {
-    // 1. No token? Nothing to do—go to login.
+    
     if (!token) {
       setLoading(false);
       navigate("/login");
       return;
     }
 
-    // 2. Already have a user in context? We’re good.
+    
     if (user) {
       setLoading(false);
       return;
     }
 
-    // 3. Have a token but no user: fetch / decode to repopulate context.
+    
     const restoreUser = async () => {
       try {
-        // Example: call your “/me” endpoint—adapt as needed.
+        
         const res = await axios.get("/users/profile");
         if (res.data) {
             setUser(res.data.user); 
@@ -39,9 +39,9 @@ const UserAuth = ({children}) => {
         };
 
         
-        // put user back into context
+        
       } catch (err) {
-        // Token is bad or request failed—clear it and bounce to login
+        
         localStorage.removeItem("token");
         navigate("/login");
       } finally {
